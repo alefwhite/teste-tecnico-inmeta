@@ -1,11 +1,17 @@
 import "dotenv/config";
 
+import path from "node:path";
+import cookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 import fastifyHelmet from "@fastify/helmet";
+import fastifyJwt from "@fastify/jwt";
+import multipart from "@fastify/multipart";
+import fastifyRateLimit from "@fastify/rate-limit";
+import fastifyStatic from "@fastify/static";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
-
 import Fastify from "fastify";
+
 import {
 	jsonSchemaTransform,
 	serializerCompiler,
@@ -13,7 +19,7 @@ import {
 	type ZodTypeProvider,
 } from "fastify-type-provider-zod";
 import z from "zod";
-import { env } from "./shared/config/env";
+import { env } from "@/shared/config/env";
 
 export const app = Fastify({
 	logger: true,
@@ -25,6 +31,32 @@ app.register(fastifyCors, {
 });
 
 app.register(fastifyHelmet);
+app.register(fastifyRateLimit, {
+	max: 200,
+	timeWindow: "1 minute",
+});
+
+app.register(multipart, {
+	limits: { fileSize: 16777216 },
+});
+app.register(fastifyStatic, {
+	root: path.resolve("./uploads"),
+	prefix: "/uploads",
+});
+
+app.register(fastifyJwt, {
+	secret: env.JWT_SECRET,
+	cookie: {
+		cookieName: "refreshToken",
+		signed: false,
+	},
+	sign: {
+		// expiresIn: '15m', TODO: Depois que fizer o refresh token mudar para 15m
+		expiresIn: "30d",
+	},
+});
+
+app.register(cookie);
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
