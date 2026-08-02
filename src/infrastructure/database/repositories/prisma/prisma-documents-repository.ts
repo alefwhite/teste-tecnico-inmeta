@@ -2,8 +2,10 @@ import { Document } from "@/domain/entities/document.entity";
 import { DocumentVersion } from "@/domain/entities/document-version.entity";
 import { ResourceNotFoundError } from "@/domain/errors/resource-not-found-error";
 import type {
+	CollaboratorDocument,
 	DocumentsRepository,
 	DocumentWithLatestVersion,
+	FindManyCollaboratorDocumentsParams,
 	FindManyPendingDocumentsParams,
 	PendingDocument,
 	SubmitDocumentInput,
@@ -26,6 +28,20 @@ interface PendingDocumentRow {
 
 interface PendingCountRow {
 	total: bigint;
+}
+
+interface CollaboratorDocumentRow {
+	documentId: string;
+	documentTypeId: string;
+	documentTypeName: string;
+	versionId: string;
+	versionNumber: number;
+	fileName: string;
+	fileSize: number;
+	mimeType: string;
+	storageKey: string;
+	storageUrl: string;
+	createdAt: Date;
 }
 
 export class PrismaDocumentsRepository implements DocumentsRepository {
@@ -145,6 +161,77 @@ export class PrismaDocumentsRepository implements DocumentsRepository {
 		});
 
 		return DocumentMapper.toDomain(document);
+	}
+
+	async findManyByCollaborator(
+		params: FindManyCollaboratorDocumentsParams,
+	): Promise<Paginated<CollaboratorDocument>> {
+		const { collaboratorId, page, limit } = params;
+		const offset = (page - 1) * limit;
+
+		const [rows, countRows] = await Promise.all([
+			prisma.$queryRaw<CollaboratorDocumentRow[]>`
+				SELECT
+					d.id AS "documentId",
+					d.document_type_id AS "documentTypeId",
+					dt.name AS "documentTypeName",
+					dv.id AS "versionId",
+					dv.version_number AS "versionNumber",
+					dv.file_name AS "fileName",
+					dv.file_size AS "fileSize",
+					dv.mime_type AS "mimeType",
+					dv.storage_key AS "storageKey",
+					dv.storage_url AS "storageUrl",
+					dv.created_at AS "createdAt"
+				FROM documents d
+				JOIN document_types dt
+					ON dt.id = d.document_type_id AND dt.deleted_at IS NULL
+				JOIN LATERAL (
+					SELECT *
+					FROM document_versions
+					WHERE document_id = d.id
+					ORDER BY version_number DESC
+					LIMIT 1
+				) dv ON TRUE
+				WHERE d.collaborator_id = ${collaboratorId}
+					AND d.deleted_at IS NULL
+				ORDER BY dv.created_at DESC
+				LIMIT ${limit} OFFSET ${offset}
+			`,
+			prisma.$queryRaw<PendingCountRow[]>`
+				SELECT COUNT(*)::bigint AS total
+				FROM documents d
+				WHERE d.collaborator_id = ${collaboratorId}
+					AND d.deleted_at IS NULL
+			`,
+		]);
+
+		const total = Number(countRows[0]?.total ?? 0);
+
+		return {
+			data: rows.map<CollaboratorDocument>((row) => ({
+				document: {
+					id: row.documentId,
+					documentTypeId: row.documentTypeId,
+				},
+				documentType: {
+					id: row.documentTypeId,
+					name: row.documentTypeName,
+				},
+				activeVersion: new DocumentVersion({
+					id: row.versionId,
+					documentId: row.documentId,
+					versionNumber: row.versionNumber,
+					fileName: row.fileName,
+					fileSize: row.fileSize,
+					mimeType: row.mimeType,
+					storageKey: row.storageKey,
+					storageUrl: row.storageUrl,
+					createdAt: row.createdAt,
+				}),
+			})),
+			meta: buildPaginationMeta({ page, limit }, total),
+		};
 	}
 
 	async findManyPending(

@@ -1,5 +1,6 @@
 import { DeleteDocumentUseCase } from "@/application/use-cases/documents/delete-document.use-case";
 import { GetDocumentHistoryUseCase } from "@/application/use-cases/documents/get-document-history.use-case";
+import { ListCollaboratorDocumentsUseCase } from "@/application/use-cases/documents/list-collaborator-documents.use-case";
 import { ListPendingDocumentsUseCase } from "@/application/use-cases/documents/list-pending-documents.use-case";
 import { SubmitDocumentUseCase } from "@/application/use-cases/documents/submit-document.use-case";
 import { PrismaCollaboratorDocumentTypesRepository } from "@/infrastructure/database/repositories/prisma/prisma-collaborator-document-types-repository";
@@ -23,6 +24,12 @@ export const makeSubmitDocumentUseCase = () =>
 
 export const makeListPendingDocumentsUseCase = () =>
 	new ListPendingDocumentsUseCase(documentsRepository);
+
+export const makeListCollaboratorDocumentsUseCase = () =>
+	new ListCollaboratorDocumentsUseCase(
+		collaboratorsRepository,
+		documentsRepository,
+	);
 
 export const makeGetDocumentHistoryUseCase = () =>
 	new GetDocumentHistoryUseCase(documentsRepository);

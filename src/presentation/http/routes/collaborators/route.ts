@@ -3,13 +3,17 @@ import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { createCollaboratorController } from "@/presentation/http/controllers/collaborators/create-collaborator.controller";
 import { deleteCollaboratorController } from "@/presentation/http/controllers/collaborators/delete-collaborator.controller";
 import { getCollaboratorController } from "@/presentation/http/controllers/collaborators/get-collaborator.controller";
+import { listCollaboratorDocumentsController } from "@/presentation/http/controllers/collaborators/list-collaborator-documents.controller";
 import { listCollaboratorsController } from "@/presentation/http/controllers/collaborators/list-collaborators.controller";
 import { updateCollaboratorController } from "@/presentation/http/controllers/collaborators/update-collaborator.controller";
 import { authenticate } from "@/presentation/http/middlewares/authenticate";
 import {
+	collaboratorDocumentsParamsSchema,
 	collaboratorIdParamsSchema,
 	createCollaboratorBodySchema,
 	createCollaboratorResponseSchema,
+	listCollaboratorDocumentsQuerySchema,
+	listCollaboratorDocumentsResponseSchema,
 	listCollaboratorsQuerySchema,
 	listCollaboratorsResponseSchema,
 	updateCollaboratorBodySchema,
@@ -66,6 +70,21 @@ export async function collaboratorsRoutes(app: FastifyInstance) {
 		},
 		preHandler: authenticate,
 		handler: updateCollaboratorController,
+	});
+
+	app.withTypeProvider<ZodTypeProvider>().route({
+		method: "GET",
+		url: "/:collaboratorId/documents",
+		schema: {
+			description:
+				"List documents submitted by a collaborator with their active version",
+			tags: ["Collaborators"],
+			params: collaboratorDocumentsParamsSchema,
+			querystring: listCollaboratorDocumentsQuerySchema,
+			response: { 200: listCollaboratorDocumentsResponseSchema },
+		},
+		preHandler: authenticate,
+		handler: listCollaboratorDocumentsController,
 	});
 
 	app.withTypeProvider<ZodTypeProvider>().route({

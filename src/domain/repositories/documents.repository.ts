@@ -43,6 +43,24 @@ export interface FindManyPendingDocumentsParams {
 	search?: string;
 }
 
+export interface CollaboratorDocument {
+	document: {
+		id: string;
+		documentTypeId: string;
+	};
+	documentType: {
+		id: string;
+		name: string;
+	};
+	activeVersion: DocumentVersion;
+}
+
+export interface FindManyCollaboratorDocumentsParams {
+	collaboratorId: string;
+	page: number;
+	limit: number;
+}
+
 export interface DocumentsRepository {
 	submit(data: SubmitDocumentInput): Promise<SubmitDocumentResult>;
 	findById(id: string): Promise<Document | null>;
@@ -52,4 +70,7 @@ export interface DocumentsRepository {
 	findManyPending(
 		params: FindManyPendingDocumentsParams,
 	): Promise<Paginated<PendingDocument>>;
+	findManyByCollaborator(
+		params: FindManyCollaboratorDocumentsParams,
+	): Promise<Paginated<CollaboratorDocument>>;
 }

@@ -1,4 +1,5 @@
 import z from "zod";
+import { documentVersionResourceSchema } from "@/presentation/http/routes/documents/document.schema";
 import {
 	paginationMetaSchema,
 	paginationQuerySchema,
@@ -38,5 +39,28 @@ export const createCollaboratorResponseSchema = z.object({
 
 export const listCollaboratorsResponseSchema = z.object({
 	data: z.array(collaboratorResourceSchema),
+	meta: paginationMetaSchema,
+});
+
+export const collaboratorDocumentsParamsSchema = z.object({
+	collaboratorId: z.uuid(),
+});
+
+export const collaboratorDocumentResourceSchema = z.object({
+	document: z.object({
+		id: z.uuid(),
+		documentTypeId: z.uuid(),
+	}),
+	documentType: z.object({
+		id: z.uuid(),
+		name: z.string(),
+	}),
+	activeVersion: documentVersionResourceSchema,
+});
+
+export const listCollaboratorDocumentsQuerySchema = paginationQuerySchema;
+
+export const listCollaboratorDocumentsResponseSchema = z.object({
+	data: z.array(collaboratorDocumentResourceSchema),
 	meta: paginationMetaSchema,
 });
