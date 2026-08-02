@@ -58,10 +58,6 @@ app.register(fastifyJwt, {
 		cookieName: "refreshToken",
 		signed: false,
 	},
-	sign: {
-		// expiresIn: '15m', TODO: Depois que fizer o refresh token mudar para 15m
-		expiresIn: "30d",
-	},
 });
 
 app.register(cookie);
