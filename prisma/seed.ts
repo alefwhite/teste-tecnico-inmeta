@@ -11,40 +11,35 @@ const TEST_PASSWORD = "secret123";
 
 const collaborators = [
 	{
-		id: "00000000-0000-0000-0000-000000000001",
+		id: "a80b4e88-3ed6-4320-8cf8-1d7b31a5d1fc",
 		name: "Ana Souza",
 		email: "ana@example.com",
 	},
 	{
-		id: "00000000-0000-0000-0000-000000000002",
+		id: "29fe9fe5-1f72-4c9c-8cf0-451ae7c0b92d",
 		name: "Bia Lima",
 		email: "bia@example.com",
-	},
-	{
-		id: "00000000-0000-0000-0000-000000000003",
-		name: "Caio Pereira",
-		email: "caio@example.com",
 	},
 ];
 
 const documentTypes = [
 	{
-		id: "00000000-0000-0000-0000-000000000101",
+		id: "1ee8b727-f89e-4a2f-b100-62d1ef765112",
 		name: "RG",
 		description: "Registro Geral",
 	},
 	{
-		id: "00000000-0000-0000-0000-000000000102",
+		id: "1cd9af08-38e0-491c-8945-5997c03849cc",
 		name: "CPF",
 		description: "Cadastro de Pessoas Físicas",
 	},
 	{
-		id: "00000000-0000-0000-0000-000000000103",
+		id: "e85b854b-5164-4f8a-a466-172e6a97c923",
 		name: "CNH",
 		description: "Carteira Nacional de Habilitação",
 	},
 	{
-		id: "00000000-0000-0000-0000-000000000104",
+		id: "361fe617-26a4-43ff-95af-768aa1fcf3c7",
 		name: "Comprovante de Residência",
 		description: "Comprovante de endereço",
 	},
@@ -56,16 +51,11 @@ const links = [
 	{ collaboratorId: collaborators[0].id, documentTypeId: documentTypes[2].id },
 	{ collaboratorId: collaborators[1].id, documentTypeId: documentTypes[0].id },
 	{ collaboratorId: collaborators[1].id, documentTypeId: documentTypes[1].id },
-	{ collaboratorId: collaborators[2].id, documentTypeId: documentTypes[2].id },
-	{
-		collaboratorId: collaborators[2].id,
-		documentTypeId: documentTypes[3].id,
-	},
 ];
 
 const documents = [
 	{
-		id: "00000000-0000-0000-0000-000000000201",
+		id: "35e7ec6c-c4db-4e97-a608-79481d0f6531",
 		collaboratorId: collaborators[0].id,
 		documentTypeId: documentTypes[0].id,
 		versions: [
@@ -78,7 +68,7 @@ const documents = [
 		],
 	},
 	{
-		id: "00000000-0000-0000-0000-000000000202",
+		id: "3f4e52e9-3758-4130-8c6e-10cf24a63fe1",
 		collaboratorId: collaborators[0].id,
 		documentTypeId: documentTypes[1].id,
 		versions: [
@@ -97,7 +87,7 @@ const documents = [
 		],
 	},
 	{
-		id: "00000000-0000-0000-0000-000000000203",
+		id: "9f55ce11-94fc-4432-841d-b6de86193cfd",
 		collaboratorId: collaborators[1].id,
 		documentTypeId: documentTypes[0].id,
 		versions: [
