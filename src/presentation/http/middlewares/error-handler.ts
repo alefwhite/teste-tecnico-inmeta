@@ -1,6 +1,5 @@
 import type { FastifyInstance } from "fastify";
 import { hasZodFastifySchemaValidationErrors } from "fastify-type-provider-zod";
-import { ZodError } from "zod";
 import { AppError } from "@/domain/errors/app-error";
 
 type FieldErrors = Record<string, string[]>;
@@ -23,17 +22,7 @@ export const errorHandler: FastifyInstance["errorHandler"] = (
 	request,
 	reply,
 ) => {
-	if (error instanceof ZodError) {
-		return reply.status(400).send({
-			message: "Erro de validação nos dados fornecidos.",
-			errors: toFieldErrors(
-				error.issues.map((issue) => ({
-					path: issue.path.map(String),
-					message: issue.message,
-				})),
-			),
-		});
-	}
+	request.log.error({ err: error });
 
 	if (hasZodFastifySchemaValidationErrors(error)) {
 		return reply.status(400).send({
@@ -41,7 +30,7 @@ export const errorHandler: FastifyInstance["errorHandler"] = (
 			errors: toFieldErrors(
 				(error.validation ?? []).map((issue) => ({
 					path: issue.instancePath.split("/").filter(Boolean),
-					message: issue.message ?? "Invalid input",
+					message: issue.message ?? "Campo inválido!",
 				})),
 			),
 		});
@@ -52,8 +41,6 @@ export const errorHandler: FastifyInstance["errorHandler"] = (
 			message: error.message,
 		});
 	}
-
-	request.log.error({ err: error });
 
 	return reply.status(500).send({
 		message: "Internal server error",
