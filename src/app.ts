@@ -21,7 +21,12 @@ import {
 } from "fastify-type-provider-zod";
 import z from "zod";
 import { errorHandler } from "@/presentation/http/middlewares/error-handler";
+import { authRoutes } from "@/presentation/http/routes/auth/route";
 import { collaboratorsRoutes } from "@/presentation/http/routes/collaborators/route";
+import { documentTypesRoutes } from "@/presentation/http/routes/document-types/route";
+import { documentsRoutes } from "@/presentation/http/routes/documents/route";
+import { linksRoutes } from "@/presentation/http/routes/links/route";
+import { statsRoutes } from "@/presentation/http/routes/stats/route";
 import { env } from "@/shared/config/env";
 
 export const app = Fastify({
@@ -111,3 +116,8 @@ app.withTypeProvider<ZodTypeProvider>().route({
 app.setErrorHandler(errorHandler);
 
 app.register(collaboratorsRoutes, { prefix: "/collaborators" });
+app.register(documentTypesRoutes, { prefix: "/document-types" });
+app.register(linksRoutes, { prefix: "/collaborators" });
+app.register(documentsRoutes, { prefix: "/documents" });
+app.register(statsRoutes, { prefix: "/stats" });
+app.register(authRoutes, { prefix: "/auth" });
