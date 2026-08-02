@@ -10,6 +10,7 @@ import {
 	documentIdParamsSchema,
 	listPendingDocumentsQuerySchema,
 	listPendingDocumentsResponseSchema,
+	submitDocumentBodySchema,
 	submitDocumentResponseSchema,
 } from "@/presentation/http/routes/documents/document.schema";
 
@@ -21,6 +22,7 @@ export async function documentsRoutes(app: FastifyInstance) {
 			description: "Submit a document file (creates a new version)",
 			tags: ["Documents"],
 			consumes: ["multipart/form-data"],
+			body: submitDocumentBodySchema,
 			response: { 201: submitDocumentResponseSchema },
 		},
 		preHandler: authenticate,

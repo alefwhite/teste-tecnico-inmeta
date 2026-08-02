@@ -19,6 +19,23 @@ export const documentIdParamsSchema = z.object({
 	id: z.uuid(),
 });
 
+export const submitDocumentBodySchema = z.any().meta({
+	type: "object",
+	properties: {
+		documentTypeId: {
+			type: "string",
+			format: "uuid",
+			description: "ID do tipo de documento",
+		},
+		file: {
+			type: "string",
+			format: "binary",
+			description: "Arquivo do documento",
+		},
+	},
+	required: ["documentTypeId", "file"],
+});
+
 export const submitDocumentResponseSchema = z.object({
 	document: z.object({
 		id: z.uuid(),

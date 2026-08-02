@@ -10,37 +10,42 @@ export async function submitDocumentController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const part = await request.file();
+	let documentTypeId: string | undefined;
+	let fileName: string | undefined;
+	let mimeType: string | undefined;
+	let buffer: Buffer | undefined;
 
-	if (!part) {
+	for await (const part of request.parts()) {
+		if (part.type === "field" && part.fieldname === "documentTypeId") {
+			documentTypeId = String(part.value);
+		} else if (part.type === "file") {
+			const partBuffer = await part.toBuffer();
+			if (!buffer) {
+				fileName = part.filename;
+				mimeType = part.mimetype;
+				buffer = partBuffer;
+			}
+		}
+	}
+
+	if (!buffer) {
 		throw new BadRequestError("A file is required.");
 	}
 
-	const documentTypeIdField = part.fields.documentTypeId;
-	const rawDocumentTypeId = Array.isArray(documentTypeIdField)
-		? documentTypeIdField[0]
-		: documentTypeIdField;
-	const documentTypeIdValue =
-		rawDocumentTypeId && "value" in rawDocumentTypeId
-			? rawDocumentTypeId.value
-			: undefined;
+	const parsedDocumentTypeId = documentTypeIdSchema.safeParse(documentTypeId);
 
-	const documentTypeId = documentTypeIdSchema.safeParse(documentTypeIdValue);
-
-	if (!documentTypeId.success) {
+	if (!parsedDocumentTypeId.success) {
 		throw new BadRequestError("A valid documentTypeId is required.");
 	}
-
-	const buffer = await part.toBuffer();
 
 	const useCase = makeSubmitDocumentUseCase();
 
 	const result = await useCase.execute({
 		collaboratorId: request.user.sub,
-		documentTypeId: documentTypeId.data,
-		fileName: part.filename,
+		documentTypeId: parsedDocumentTypeId.data,
+		fileName: fileName ?? "",
 		fileSize: buffer.byteLength,
-		mimeType: part.mimetype,
+		mimeType: mimeType ?? "",
 		buffer,
 	});
 
