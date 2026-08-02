@@ -21,5 +21,68 @@ model Collaborators {
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
+  documentTypeLinks CollaboratorDocumentTypes[]
+  documents         Documents[]
+
   @@map("collaborators")
+}
+
+model DocumentTypes {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  collaboratorLinks CollaboratorDocumentTypes[]
+  documents         Documents[]
+
+  @@map("document_types")
+}
+
+model CollaboratorDocumentTypes {
+  id             String        @id @default(uuid())
+  collaboratorId String        @map("collaborator_id")
+  documentTypeId String        @map("document_type_id")
+  createdAt      DateTime      @default(now()) @map("created_at")
+
+  collaborator Collaborators @relation(fields: [collaboratorId], references: [id], onDelete: Cascade)
+  documentType DocumentTypes @relation(fields: [documentTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([collaboratorId, documentTypeId])
+  @@map("collaborator_document_types")
+}
+
+model Documents {
+  id             String        @id @default(uuid())
+  collaboratorId String        @map("collaborator_id")
+  documentTypeId String        @map("document_type_id")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  deletedAt      DateTime?     @map("deleted_at")
+
+  collaborator Collaborators      @relation(fields: [collaboratorId], references: [id], onDelete: Cascade)
+  documentType DocumentTypes      @relation(fields: [documentTypeId], references: [id], onDelete: Cascade)
+  versions     DocumentVersions[]
+
+  @@unique([collaboratorId, documentTypeId])
+  @@map("documents")
+}
+
+model DocumentVersions {
+  id            String    @id @default(uuid())
+  documentId    String    @map("document_id")
+  versionNumber Int       @map("version_number")
+  fileName      String    @map("file_name")
+  fileSize      Int       @map("file_size")
+  mimeType      String    @map("mime_type")
+  storageKey    String    @map("storage_key")
+  storageUrl    String    @map("storage_url")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  document Documents @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, versionNumber])
+  @@map("document_versions")
 }
