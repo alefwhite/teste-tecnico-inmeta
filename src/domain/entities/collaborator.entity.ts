@@ -16,6 +16,12 @@ export interface CreateCollaboratorDTO {
 	password: string;
 }
 
+export interface UpdateCollaboratorDTO {
+	name?: string;
+	email?: string;
+	password?: string;
+}
+
 export class Collaborator {
 	id: string;
 	name: string;
@@ -45,5 +51,16 @@ export class Collaborator {
 			updatedAt: new Date(),
 			deletedAt: null,
 		});
+	}
+
+	update(data: UpdateCollaboratorDTO): void {
+		if (data.name !== undefined) this.name = data.name;
+		if (data.email !== undefined) this.email = data.email;
+		if (data.password !== undefined) this.password = data.password;
+		this.updatedAt = new Date();
+	}
+
+	softDelete(): void {
+		this.deletedAt = new Date();
 	}
 }

@@ -1,5 +1,5 @@
-import { Collaborator } from "@/domain/entities/collaborator.entity";
 import { ConflictError } from "@/domain/errors/conflict-error";
+import type { PasswordHasherProvider } from "@/domain/providers/password-hasher.provider";
 import type { CollaboratorsRepository } from "@/domain/repositories/collaborators.repository";
 
 export interface CreateCollaboratorUseCaseInput {
@@ -9,9 +9,12 @@ export interface CreateCollaboratorUseCaseInput {
 }
 
 export class CreateCollaboratorUseCase {
-	constructor(private collaboratorsRepository: CollaboratorsRepository) {}
+	constructor(
+		private collaboratorsRepository: CollaboratorsRepository,
+		private passwordHasher: PasswordHasherProvider,
+	) {}
 
-	async execute(data: CreateCollaboratorUseCaseInput): Promise<Collaborator> {
+	async execute(data: CreateCollaboratorUseCaseInput) {
 		const existingCollaborator = await this.collaboratorsRepository.findByEmail(
 			data.email,
 		);
@@ -20,15 +23,12 @@ export class CreateCollaboratorUseCase {
 			throw new ConflictError("Collaborator with this email already exists.");
 		}
 
-		const collaborator = Collaborator.create({
+		const password = await this.passwordHasher.hash(data.password);
+
+		return this.collaboratorsRepository.create({
 			name: data.name,
 			email: data.email,
-			password: data.password,
+			password,
 		});
-
-		const createdCollaborator =
-			await this.collaboratorsRepository.create(collaborator);
-
-		return createdCollaborator;
 	}
 }
