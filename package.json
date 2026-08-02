@@ -9,6 +9,7 @@
 		"build": "pnpm exec prisma generate && tsc",
 		"prisma:generate": "prisma generate",
 		"prisma:migrate": "prisma migrate dev",
+		"prisma:seed": "prisma db seed",
 		"prisma:deploy": "prisma migrate deploy && prisma generate",
 		"prisma:status": "prisma migrate status",
 		"prisma:studio": "prisma studio",
@@ -40,6 +41,7 @@
 		"dotenv": "^17.4.2",
 		"fastify": "^5.10.0",
 		"fastify-type-provider-zod": "^7.0.0",
+		"pg": "^8.22.0",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {

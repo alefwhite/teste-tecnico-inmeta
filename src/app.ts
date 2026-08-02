@@ -1,4 +1,5 @@
 import "dotenv/config";
+import "@/shared/config/i18n";
 
 import path from "node:path";
 import cookie from "@fastify/cookie";
@@ -19,6 +20,8 @@ import {
 	type ZodTypeProvider,
 } from "fastify-type-provider-zod";
 import z from "zod";
+import { errorHandler } from "@/presentation/http/middlewares/error-handler";
+import { collaboratorsRoutes } from "@/presentation/http/routes/collaborators/route";
 import { env } from "@/shared/config/env";
 
 export const app = Fastify({
@@ -104,3 +107,7 @@ app.withTypeProvider<ZodTypeProvider>().route({
 		};
 	},
 });
+
+app.setErrorHandler(errorHandler);
+
+app.register(collaboratorsRoutes, { prefix: "/collaborators" });
