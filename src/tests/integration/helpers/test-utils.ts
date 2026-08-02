@@ -91,24 +91,34 @@ const TEST_BOUNDARY = "----inmetaTestBoundary";
 function buildMultipartBody(
 	fields: Record<string, string>,
 	file: { filename: string; contentType: string; content: Buffer },
+	fileFirst = false,
 ) {
 	const chunks: Buffer[] = [];
 
-	for (const [name, value] of Object.entries(fields)) {
-		chunks.push(
+	const fieldChunks = () =>
+		Object.entries(fields).map(([name, value]) =>
 			Buffer.from(
 				`--${TEST_BOUNDARY}\r\nContent-Disposition: form-data; name="${name}"\r\n\r\n${value}\r\n`,
 			),
 		);
-	}
 
-	chunks.push(
+	const fileChunks = () => [
 		Buffer.from(
 			`--${TEST_BOUNDARY}\r\nContent-Disposition: form-data; name="file"; filename="${file.filename}"\r\nContent-Type: ${file.contentType}\r\n\r\n`,
 		),
-	);
-	chunks.push(file.content);
-	chunks.push(Buffer.from(`\r\n--${TEST_BOUNDARY}--\r\n`));
+		file.content,
+		Buffer.from(`\r\n`),
+	];
+
+	if (fileFirst) {
+		chunks.push(...fileChunks());
+		chunks.push(...fieldChunks());
+	} else {
+		chunks.push(...fieldChunks());
+		chunks.push(...fileChunks());
+	}
+
+	chunks.push(Buffer.from(`--${TEST_BOUNDARY}--\r\n`));
 
 	return Buffer.concat(chunks);
 }
@@ -122,6 +132,7 @@ export async function submitDocument(
 		fileSize: number;
 		mimeType: string;
 	},
+	fileFirst = false,
 ) {
 	const response = await app.inject({
 		method: "POST",
@@ -137,6 +148,7 @@ export async function submitDocument(
 				contentType: payload.mimeType,
 				content: Buffer.alloc(payload.fileSize),
 			},
+			fileFirst,
 		),
 	});
 

@@ -2,8 +2,10 @@ import { Document } from "@/domain/entities/document.entity";
 import { DocumentVersion } from "@/domain/entities/document-version.entity";
 import { ResourceNotFoundError } from "@/domain/errors/resource-not-found-error";
 import type {
+	CollaboratorDocument,
 	DocumentsRepository,
 	DocumentWithLatestVersion,
+	FindManyCollaboratorDocumentsParams,
 	FindManyPendingDocumentsParams,
 	PendingDocument,
 	SubmitDocumentInput,
@@ -15,9 +17,14 @@ export class InMemoryDocumentsRepository implements DocumentsRepository {
 	private documents = new Map<string, Document>();
 	private versions = new Map<string, DocumentVersion[]>();
 	private pending: PendingDocument[] = [];
+	private documentTypeNames = new Map<string, string>();
 
 	seedPending(pending: PendingDocument[]): void {
 		this.pending = pending;
+	}
+
+	seedDocumentType(documentTypeId: string, name: string): void {
+		this.documentTypeNames.set(documentTypeId, name);
 	}
 
 	async submit(data: SubmitDocumentInput): Promise<SubmitDocumentResult> {
@@ -130,6 +137,50 @@ export class InMemoryDocumentsRepository implements DocumentsRepository {
 					item.documentType.name.toLowerCase().includes(search),
 			);
 		}
+
+		const start = (params.page - 1) * params.limit;
+
+		return {
+			data: list.slice(start, start + params.limit),
+			meta: buildPaginationMeta(
+				{ page: params.page, limit: params.limit },
+				list.length,
+			),
+		};
+	}
+
+	async findManyByCollaborator(
+		params: FindManyCollaboratorDocumentsParams,
+	): Promise<Paginated<CollaboratorDocument>> {
+		const list = [...this.documents.values()]
+			.filter(
+				(document) =>
+					document.collaboratorId === params.collaboratorId &&
+					!document.deletedAt,
+			)
+			.map<CollaboratorDocument | null>((document) => {
+				const versions = this.versions.get(document.id) ?? [];
+				const latest = versions[versions.length - 1];
+
+				if (!latest) {
+					return null;
+				}
+
+				return {
+					document: {
+						id: document.id,
+						documentTypeId: document.documentTypeId,
+					},
+					documentType: {
+						id: document.documentTypeId,
+						name:
+							this.documentTypeNames.get(document.documentTypeId) ??
+							document.documentTypeId,
+					},
+					activeVersion: latest,
+				};
+			})
+			.filter((item): item is CollaboratorDocument => item !== null);
 
 		const start = (params.page - 1) * params.limit;
 

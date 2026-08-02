@@ -172,4 +172,61 @@ describe("Documents API (integration)", () => {
 
 		expect(result.response.statusCode).toBe(400);
 	});
+
+	it("submits a document when the file part comes before documentTypeId", async () => {
+		const result = await submitDocument(
+			app,
+			headers,
+			{
+				documentTypeId,
+				fileName: "rg-file-first.pdf",
+				fileSize: 1024,
+				mimeType: "application/pdf",
+			},
+			true,
+		);
+
+		expect(result.response.statusCode).toBe(201);
+		expect(result.body.version.versionNumber).toBe(1);
+	});
+
+	it("lists a collaborator's documents with the active (latest) version", async () => {
+		await submitDocument(app, headers, {
+			documentTypeId,
+			fileName: "rg.pdf",
+			fileSize: 1024,
+			mimeType: "application/pdf",
+		});
+
+		const resubmitted = await submitDocument(app, headers, {
+			documentTypeId,
+			fileName: "rg-v2.pdf",
+			fileSize: 2048,
+			mimeType: "application/pdf",
+		});
+
+		const list = await app.inject({
+			method: "GET",
+			url: `/collaborators/${collaboratorId}/documents`,
+			headers,
+		});
+
+		expect(list.statusCode).toBe(200);
+		expect(list.json().data).toHaveLength(1);
+		expect(list.json().data[0]).toMatchObject({
+			document: { id: resubmitted.body.document.id, documentTypeId },
+			documentType: { id: documentTypeId },
+			activeVersion: { versionNumber: 2, fileName: "rg-v2.pdf" },
+		});
+	});
+
+	it("returns 404 when listing documents of an unknown collaborator", async () => {
+		const list = await app.inject({
+			method: "GET",
+			url: "/collaborators/00000000-0000-0000-0000-000000000000/documents",
+			headers,
+		});
+
+		expect(list.statusCode).toBe(404);
+	});
 });
