@@ -12,8 +12,10 @@ FROM node:20-alpine
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/src ./src
 
-EXPOSE 3333
-CMD ["pnpm", "run", "start"]
+EXPOSE 3000
+CMD ["node_modules/.bin/tsx", "src/server.ts"]
