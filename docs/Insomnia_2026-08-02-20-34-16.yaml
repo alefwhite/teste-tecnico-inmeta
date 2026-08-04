@@ -1,0 +1,693 @@
+type: spec.insomnia.rest/5.0
+schema_version: "5.1"
+name: API-Inmeta
+meta:
+  id: wrk_931ddab197df4ef4924338e12b24cadc
+  created: 1785376064363
+  modified: 1785376064363
+  description: ""
+collection:
+  - name: Collaborators
+    meta:
+      id: fld_749d9576b72f479196bfda9434197f04
+      created: 1762405520270
+      modified: 1785376096273
+      sortKey: -1758913022165
+      description: ""
+    children:
+      - url: "{{ _.baseUrl }}/collaborators"
+        name: Create collaborator
+        meta:
+          id: req_6c35476aff134b7d969a83914889804b
+          created: 1762405520272
+          modified: 1785703039467
+          isPrivate: false
+          description: ""
+          sortKey: -1758947673525
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"name": "Sammy",
+            	"email": "sammy@gmail.com",
+            	"password": "12345678"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/collaborators"
+        name: Get collaborators
+        meta:
+          id: req_408ed49745664920856560b756156a4a
+          created: 1785703415898
+          modified: 1785704653955
+          isPrivate: false
+          description: ""
+          sortKey: -1758945626726.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/collaborators/a80b4e88-3ed6-4320-8cf8-1d7b31a5d1fc"
+        name: Get collaborator
+        meta:
+          id: req_94a44d9b4f8740caa6c476a41ce7662f
+          created: 1785704501024
+          modified: 1785704513838
+          isPrivate: false
+          description: ""
+          sortKey: -1758944603327.25
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/collaborators/eb5de937-daa6-4f88-acd2-46db5e1bb332"
+        name: Patch collaborator
+        meta:
+          id: req_4f3ca27ae8ee4be4992453d532d14edb
+          created: 1785704533007
+          modified: 1785704590870
+          isPrivate: false
+          description: ""
+          sortKey: -1758944091627.625
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"name": "Samara Morgado White"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/collaborators/eb5de937-daa6-4f88-acd2-46db5e1bb332"
+        name: Delete collaborator
+        meta:
+          id: req_2e366ca318324af8847e0d1ac813a536
+          created: 1785704610321
+          modified: 1785704621486
+          isPrivate: false
+          description: ""
+          sortKey: -1758943835777.8125
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl
+          }}/collaborators/eb5de937-daa6-4f88-acd2-46db5e1bb332/documents"
+        name: Get documents collaborators
+        meta:
+          id: req_b3a4dca1c5974eb2bb0cb6580da6da44
+          created: 1785712604385
+          modified: 1785712700385
+          isPrivate: false
+          description: ""
+          sortKey: -1758945115026.875
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Auth
+    meta:
+      id: fld_c862319bab67413fbc17612d800a2bed
+      created: 1785703068573
+      modified: 1785708660547
+      sortKey: -1758913022265
+      description: ""
+    children:
+      - url: "{{ _.baseUrl }}/auth/login"
+        name: login
+        meta:
+          id: req_a9368615d0a740c1b631324951844285
+          created: 1785703068573
+          modified: 1785703119735
+          isPrivate: false
+          description: ""
+          sortKey: -1758947673525
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email": "sammy@gmail.com",
+            	"password": "12345678"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Document Types
+    meta:
+      id: fld_cf061f6dd8c2408eb6c6baaaa918af90
+      created: 1785704692848
+      modified: 1785704692848
+      sortKey: -1758913022152.5
+      description: ""
+    children:
+      - url: "{{ _.baseUrl }}/document-types"
+        name: Create document type
+        meta:
+          id: req_1f7314395fdd4802a2fea342a371b4fe
+          created: 1785704692848
+          modified: 1785708283358
+          isPrivate: false
+          description: ""
+          sortKey: -1758947673525
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"name": "Certidão de Casamento",
+            	"description": "Certidão de Casamento até 90 dias da emissão"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/document-types/f1930381-d1d5-4f89-b12f-671a38a87886"
+        name: Delete document type
+        meta:
+          id: req_6c3d3994f611404585655a812d182c44
+          created: 1785704692848
+          modified: 1785708573440
+          isPrivate: false
+          description: ""
+          sortKey: -1758943835777.8125
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/document-types/f1930381-d1d5-4f89-b12f-671a38a87886"
+        name: Patch document type
+        meta:
+          id: req_c402f4826e0240a59fc68cf97aaa1895
+          created: 1785704692848
+          modified: 1785708554588
+          isPrivate: false
+          description: ""
+          sortKey: -1758944091627.625
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"description": "Teste"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/document-types"
+        name: Get documents types
+        meta:
+          id: req_c51a16548a6e4123a2edd763981e4ea3
+          created: 1785704692848
+          modified: 1785708471841
+          isPrivate: false
+          description: ""
+          sortKey: -1758945626726.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Links Documents
+    meta:
+      id: fld_6594eccb2f6e460dbc7cbdccab1194b1
+      created: 1785708656970
+      modified: 1785712187283
+      sortKey: -1758913022150.9375
+      description: ""
+    children:
+      - url: "{{ _.baseUrl
+          }}/collaborators/eb5de937-daa6-4f88-acd2-46db5e1bb332/document-types/\
+          f1930381-d1d5-4f89-b12f-671a38a87886"
+        name: Unlink document collaborator
+        meta:
+          id: req_77d483dcfca24ca38709abab2c512474
+          created: 1785708656970
+          modified: 1785709069554
+          isPrivate: false
+          description: ""
+          sortKey: -1758943835777.8125
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl
+          }}/collaborators/eb5de937-daa6-4f88-acd2-46db5e1bb332/document-types"
+        name: Link document collaborator
+        meta:
+          id: req_9de017e5511648fcac4f3ca878a25baa
+          created: 1785708656970
+          modified: 1785709030238
+          isPrivate: false
+          description: ""
+          sortKey: -1758947673525
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"documentTypeId": "f1930381-d1d5-4f89-b12f-671a38a87886"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Documents
+    meta:
+      id: fld_cc3ad60012f2429d83cc0b5553ce6981
+      created: 1785709382210
+      modified: 1785712208854
+      sortKey: -1758913022150.5469
+      description: ""
+    children:
+      - url: "{{ _.baseUrl }}/documents/721ceb80-e353-4934-8e39-86b21552fb51"
+        name: Delete document collaborator
+        meta:
+          id: req_14fee9e6fa1f41cba695ecc16bfc8535
+          created: 1785709382210
+          modified: 1785712138106
+          isPrivate: false
+          description: ""
+          sortKey: -1758943835777.8125
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/documents"
+        name: Upload document collaborator
+        meta:
+          id: req_abb3c05b692e4c61b18648c7e1027430
+          created: 1785709382210
+          modified: 1785712100860
+          isPrivate: false
+          description: ""
+          sortKey: -1758947673525
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: documentTypeId
+              value: f1930381-d1d5-4f89-b12f-671a38a87886
+              description: ""
+              disabled: false
+              multiline: false
+              type: text
+            - name: file
+              value: ""
+              description: ""
+              disabled: false
+              fileName: C:\Users\USER\OneDrive\Pictures\Screenshots\Captura de tela 2025-11-27
+                124136.png
+              type: file
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/documents/pending"
+        name: List pending document collaborators
+        meta:
+          id: req_c36f74c7ba3b4dc5851f04a222d2e268
+          created: 1785710694727
+          modified: 1785710804018
+          isPrivate: false
+          description: ""
+          sortKey: -1758946650125.75
+        method: GET
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: file
+              value: ""
+              description: ""
+              disabled: false
+              fileName: C:\Users\USER\OneDrive\Pictures\Screenshots\Captura de tela 2025-11-26
+                123458.png
+              type: file
+            - name: documentTypeId
+              value: "{}"
+              description: ""
+              disabled: false
+              multiline: false
+              type: text
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/documents/721ceb80-e353-4934-8e39-86b21552fb51/versions"
+        name: List document versions
+        meta:
+          id: req_c5bc81a159d44bc3843aa486528cec3e
+          created: 1785711875141
+          modified: 1785712047377
+          isPrivate: false
+          description: ""
+          sortKey: -1758946138426.125
+        method: GET
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: file
+              value: ""
+              description: ""
+              disabled: false
+              fileName: C:\Users\USER\OneDrive\Pictures\Screenshots\Captura de tela 2025-11-26
+                123458.png
+              type: file
+            - name: documentTypeId
+              value: "{}"
+              description: ""
+              disabled: false
+              multiline: false
+              type: text
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Stats
+    meta:
+      id: fld_eab290ad78bc4ca4a8844dc5d5d4110d
+      created: 1785712198163
+      modified: 1785712207568
+      sortKey: -1758913022150.1562
+      description: ""
+    children:
+      - url: "{{ _.baseUrl }}/stats/dashboard"
+        name: Link document collaborator
+        meta:
+          id: req_0b1b156e51c3409cb7db4397524532a2
+          created: 1785712198163
+          modified: 1785712231408
+          isPrivate: false
+          description: ""
+          sortKey: -1758947673525
+        method: GET
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"documentTypeId": "f1930381-d1d5-4f89-b12f-671a38a87886"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Authorization
+            value: Bearer {{ _.token }}
+            description: ""
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_9aff6c190ffd434895170dc53a44d530
+    created: 1758859134973
+    modified: 1785713050640
+  cookies:
+    - id: 99634f2b-376c-49de-88cc-4269305be2fe
+      key: refreshToken
+      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlYjVkZTkzNy1kYWE2LTRmODgtYWNkMi00NmRiNWUxYmIzMzIiLCJpYXQiOjE3ODU3MTMwNTAsImV4cCI6MTc4ODMwNTA1MH0.1ZfVEEkvoxNI-cCt-5SbXrFKqXmRTFz3hFrelU2HUqQ
+      domain: localhost
+      path: /
+      secure: false
+      httpOnly: true
+      hostOnly: true
+environments:
+  name: Base Environment
+  meta:
+    id: env_bd4538ef431645a9b9078d8fb70d8be4
+    created: 1758859134969
+    modified: 1758859150507
+    isPrivate: false
+  subEnvironments:
+    - name: Local
+      meta:
+        id: env_2c966751c17c4493ae139c9d8b5573c7
+        created: 1758859158047
+        modified: 1785703565071
+        isPrivate: false
+        sortKey: 1758859158047
+      data:
+        baseUrl: http://localhost:3000
+        token: "{% response 'body', 'req_a9368615d0a740c1b631324951844285',
+          'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+      color: "#39a25e"
+spec:
+  meta:
+    id: spc_9c1ec24a28074c5ca16b928192059278
+    created: 1785376064366
+    modified: 1785376064367
